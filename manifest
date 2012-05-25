@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 0.1
+apiversion: 2
+description: My module
+author: k0sukey
+license: Specify your license
+copyright: k0sukey
+
+
+# these should not be edited
+name: ticookies
+moduleid: be.k0suke.ticookies
+guid: 40424ff9-e894-49ef-a8e0-2c6ee8816805
+platform: iphone
+minsdk: 2.0.1.GA2
