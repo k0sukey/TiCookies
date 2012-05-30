@@ -8,7 +8,7 @@ var TiCookies = require('be.k0suke.ticookies');
 Ti.API.info("module is => " + TiCookies);
 
 // create cookie
-TiCookies.create({
+TiCookies.createCookie({
 	domain: '.example.com',
 	name: 'NAME',
 	value: 'VALUE',
@@ -16,14 +16,8 @@ TiCookies.create({
 	expire: '0'	// optional, default '0'
 });
 
-// get all cookies in array
-var cookies = TiCookies.getCookies();
-cookies.forEach(function(cookie){
-	Ti.API.info(cookie);
-});
-
 // remove cookies
-TiCookies.remove({
+TiCookies.removeCookies({
 	domain: '*',	// '*' is all domains, '.example.com' etc...
 	name: 'NAME'	// optional
 });
@@ -37,5 +31,13 @@ var webView = Ti.UI.createWebView({
 	url: 'https://www.google.com/'
 });
 win.add(webView);
+
+webView.addEventListener('load', function(){
+	// get all cookies in array
+	var cookies = TiCookies.getCookies();
+	cookies.forEach(function(cookie){
+		Ti.API.info(cookie);
+	});
+});
 
 win.open();
