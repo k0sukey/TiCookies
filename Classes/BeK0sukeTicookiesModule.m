@@ -143,12 +143,16 @@
 
 	NSHTTPCookie *cookie;
 	for (cookie in storage.cookies) {
-		if ([domain isEqualToString:@"*"] && name == NULL) {
+		if (([domain isEqualToString:@"*"] && name == NULL)
+		 || ([domain isEqualToString:cookie.domain] && name == NULL)
+		 || ([domain isEqualToString:cookie.domain] && [name isEqualToString:cookie.name])) {
+			NSDictionary *properties = [cookie properties];
+			[properties setValue:[NSDate dateWithTimeIntervalSinceNow:-3600] forKey:NSHTTPCookieExpires];
+			NSHTTPCookie *newCookie = [[NSHTTPCookie alloc] initWithProperties:properties];
+
 			[storage deleteCookie:cookie];
-		} else if ([domain isEqualToString:cookie.domain] && name == NULL) {
-			[storage deleteCookie:cookie];
-		} else if ([domain isEqualToString:cookie.domain] && [name isEqualToString:cookie.name]) {
-			[storage deleteCookie:cookie];
+			[storage setCookie:newCookie];
+			[newCookie release];
 		}
 	}
 }
