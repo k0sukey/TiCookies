@@ -34,8 +34,14 @@ win.add(webView);
 
 webView.addEventListener('load', function(){
 	// get all cookies in array
-	var cookies = TiCookies.getCookies();
-	cookies.forEach(function(cookie){
+	TiCookies.listedCookies().forEach(function(cookie){
+		Ti.API.info(cookie);
+	});
+
+	// get domain matches cookies in array
+	TiCookies.listedCookies({
+		domain: '.google.com'
+	}).forEach(function(cookie){
 		Ti.API.info(cookie);
 	});
 });

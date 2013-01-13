@@ -106,8 +106,12 @@
 	[cookie release];
 }
 
--(NSArray*)getCookies
+-(NSArray*)listedCookies:(id)args
 {
+	ENSURE_SINGLE_ARG_OR_NIL(args, NSDictionary);
+	NSString *domain = [TiUtils stringValue:@"domain" properties:args def:@"*"];
+	NSString *name = [args objectForKey:@"name"];
+
 	NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
 
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -117,15 +121,19 @@
 
 	NSHTTPCookie *cookie;
 	for (cookie in storage.cookies) {
-		NSDictionary *properties = [[NSMutableDictionary alloc] init];
+		if (([domain isEqualToString:@"*"] && name == NULL)
+		 || ([domain isEqualToString:cookie.domain] && name == NULL)
+		 || ([domain isEqualToString:cookie.domain] && [name isEqualToString:cookie.name])) {
+			NSDictionary *properties = [[NSMutableDictionary alloc] init];
 
-		[properties setValue:cookie.domain forKey:@"domain"];
-		[properties setValue:cookie.name forKey:@"name"];
-		[properties setValue:cookie.value forKey:@"value"];
-		[properties setValue:cookie.path forKey:@"path"];
-		[properties setValue:[formatter stringFromDate:cookie.expiresDate] forKey:@"expires"];
+			[properties setValue:cookie.domain forKey:@"domain"];
+			[properties setValue:cookie.name forKey:@"name"];
+			[properties setValue:cookie.value forKey:@"value"];
+			[properties setValue:cookie.path forKey:@"path"];
+			[properties setValue:[formatter stringFromDate:cookie.expiresDate] forKey:@"expires"];
 
-		[cookies addObject:properties];
+			[cookies addObject:properties];
+		}
 	}
 
 	[formatter release];
