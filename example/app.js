@@ -38,7 +38,7 @@ webView.addEventListener('load', function(){
 		Ti.API.info(cookie);
 	});
 
-	// get domain matches cookies in array
+	// get domain match cookies in array
 	TiCookies.listedCookies({
 		domain: '.google.com'
 	}).forEach(function(cookie){
